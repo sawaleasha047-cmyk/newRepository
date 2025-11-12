@@ -1,6 +1,7 @@
 package demo;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -70,14 +71,32 @@ public void testCase01() throws InterruptedException {
 @Test(enabled = true)
 public void testCase02() throws InterruptedException {
     System.out.println("Beginning Test Case 02");
+
     int discount = 17;
+
     driver.get("https://www.flipkart.com/");
+
+    // ✅ Correct popup close locator
+    Wrappers.clickOnElementWrapper(driver, By.xpath("//div[@class='JFPqaw']/span"));
+
+    // Search for iPhone
     Wrappers.enterTextWrapper(driver, By.xpath("//input[@name='q']"), "iPhone");
+    Thread.sleep(3000);
+    Wrappers.clickOnElementWrapper(driver, By.xpath("//button[@type='submit']"));
+
     Thread.sleep(5000);
-    Boolean status = Wrappers.printTitleAndDiscountIphone(driver, By.xpath("//div[@class='tUxRFH']/div[@class='UkUwK']/span"), discount);
+
+    Boolean status = Wrappers.printTitleAndDiscountIphone(
+            driver,
+            By.xpath("//div[@class='tUxRFH']/div[@class='UkUwK']/span"),
+            discount
+    );
+
     Assert.assertTrue(status);
-    System.out.println("Ending TestCase02");
+
+    System.out.println("Ending Test Case 02");
 }
+
 
 @Test(enabled = true)
 public void testCase03() throws InterruptedException {
