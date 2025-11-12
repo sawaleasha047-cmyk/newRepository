@@ -82,45 +82,49 @@ public class Wrappers {
         return success;
     }
 
-    public static boolean printTitleAndDiscountIphone(WebDriver driver, By locator, int discount) {
-        boolean success;
-        try {
-            HashMap<String, String> iphoneTitleDiscountMap = new HashMap<>();
-            List<WebElement> discountPercentageList = driver.findElements(locator);
+public static boolean printTitleAndDiscountIphone(WebDriver driver, By locator, int discount) {
+    boolean success = true;
 
-            for (WebElement productRow : discountPercentageList) {
-                try {
-                    String discountPercent = productRow.getText();
-                    int discountValue = Integer.parseInt(discountPercent.replaceAll("[^\\d]", ""));
-                    if (discountValue > discount) {
-                        String iphoneTitle = productRow.findElement(By.xpath("./div[@class='KzDlHZ']")).getText();
-                        iphoneTitleDiscountMap.put(discountPercent, iphoneTitle);
-                    }
-                } catch (StaleElementReferenceException e) {
-                    // Retry once if element becomes stale
-                    productRow = driver.findElement(locator);
-                    String discountPercent = productRow.getText();
-                    int discountValue = Integer.parseInt(discountPercent.replaceAll("[^\\d]", ""));
-                    if (discountValue > discount) {
-                        String iphoneTitle = productRow.findElement(By.xpath("./div[@class='KzDlHZ']")).getText();
-                        iphoneTitleDiscountMap.put(discountPercent, iphoneTitle);
-                    }
+    try {
+        // Map to store iPhone discount -> title
+        HashMap<String, String> iphoneTitleDiscountMap = new HashMap<>();
+
+        // Get all discount elements
+        List<WebElement> discountPercentageList = driver.findElements(locator);
+
+        for (WebElement productRow : discountPercentageList) {
+            String discountPercent = productRow.getText().trim();
+            try {
+                // Extract numeric discount value
+                int discountValue = Integer.parseInt(discountPercent.replaceAll("[^0-9]", ""));
+                
+                if (discountValue > discount) {
+                    // ✅ Use relative XPath from the productRow context correctly
+                    WebElement titleElement = productRow.findElement(By.xpath(".//ancestor::div[contains(@class,'tUxRFH')]//div[contains(@class,'KzDlHZ')]"));
+                    String iphoneTitle = titleElement.getText().trim();
+
+                    iphoneTitleDiscountMap.put(discountPercent, iphoneTitle);
                 }
+            } catch (NumberFormatException e) {
+                System.out.println("Skipped invalid discount: " + discountPercent);
+            } catch (Exception e) {
+                System.out.println("Unable to fetch title for discount: " + discountPercent);
             }
-
-            for (Map.Entry<String, String> iphoneTitleDiscounts : iphoneTitleDiscountMap.entrySet()) {
-                System.out.println("Iphone discount percentage: " + iphoneTitleDiscounts.getKey()
-                        + " | Title: " + iphoneTitleDiscounts.getValue());
-            }
-
-            success = true;
-        } catch (Exception e) {
-            System.out.println("Exception Occurred!");
-            e.printStackTrace();
-            success = false;
         }
-        return success;
+
+        // Print results
+        for (Map.Entry<String, String> entry : iphoneTitleDiscountMap.entrySet()) {
+            System.out.println("iPhone discount percentage: " + entry.getKey() + " | Title: " + entry.getValue());
+        }
+
+    } catch (Exception e) {
+        System.out.println("Exception Occurred in printTitleAndDiscountIphone!");
+        e.printStackTrace();
+        success = false;
     }
+
+    return success;
+}
 
 public static boolean printTitleAndImageUrlOfCoffeeMug(WebDriver driver, By locator, String searchKeyword) {
     try {

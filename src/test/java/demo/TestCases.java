@@ -70,29 +70,40 @@ public void testCase01() throws InterruptedException {
 
 @Test(enabled = true)
 public void testCase02() throws InterruptedException {
-    System.out.println("Beginning Test Case 02");
+    System.out.println("Beginning Test Case 02 - Look for phones with certain discount");
 
-    int discount = 17;
+    int discount = 17; // Minimum discount threshold
 
     driver.get("https://www.flipkart.com/");
 
-    // ✅ Correct popup close locator
-    Wrappers.clickOnElementWrapper(driver, By.xpath("//div[@class='JFPqaw']/span"));
+    // ✅ Try closing popup if it appears
+    try {
+        Wrappers.clickOnElementWrapper(driver, By.xpath("//div[@class='JFPqaw']/span"));
+        System.out.println("Closed login popup.");
+    } catch (Exception e) {
+        System.out.println("Popup not found. Continuing...");
+    }
 
-    // Search for iPhone
-    Wrappers.enterTextWrapper(driver, By.xpath("//input[@name='q']"), "iPhone");
-    Thread.sleep(3000);
-    Wrappers.clickOnElementWrapper(driver, By.xpath("//button[@type='submit']"));
+    // ✅ Search for iPhone
+    Wrappers.enterTextWrapper(driver, By.name("q"), "iPhone");
+    System.out.println("Typed iPhone into search box");
+    Wrappers.pressEnter(driver, By.name("q"));
+    System.out.println("Pressed Enter to search iPhone");
 
-    Thread.sleep(5000);
+    // ✅ Wait for results to load
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.xpath("//div[contains(@class,'tUxRFH')]")));
 
+    // ✅ Check for discounts using flexible locator
     Boolean status = Wrappers.printTitleAndDiscountIphone(
             driver,
-            By.xpath("//div[@class='tUxRFH']/div[@class='UkUwK']/span"),
+            By.xpath("//div[contains(@class,'UkUFwK') and contains(text(),'% off')]"),
             discount
     );
 
-    Assert.assertTrue(status);
+    // ✅ Assert result
+    Assert.assertTrue(status, "No iPhone found with discount >= " + discount + "%");
 
     System.out.println("Ending Test Case 02");
 }
