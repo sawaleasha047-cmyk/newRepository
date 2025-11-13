@@ -68,47 +68,21 @@ public void testCase01() throws InterruptedException {
     System.out.println("Ending Test Case 01");
 }
 
-@Test(enabled = true)
+@Test
 public void testCase02() throws InterruptedException {
-    System.out.println("Beginning Test Case 02 - Look for phones with certain discount");
+    System.out.println("Start Testcase: testCase02");
+    Wrappers.homePage(driver, By.xpath("//span[contains(@class, '_30X89F')]"));
+    Thread.sleep( 3000);
+    System.out.println("wait 1");
 
-    int discount = 17; // Minimum discount threshold
+    Wrappers.enterTextWrapper(driver, By.xpath("//input[contains(@class, 'Pke_EE')]"), "iPhone");
+    Thread.sleep( 3000);
 
-    driver.get("https://www.flipkart.com/");
-
-    // ✅ Try closing popup if it appears
-    try {
-        Wrappers.clickOnElementWrapper(driver, By.xpath("//div[@class='JFPqaw']/span"));
-        System.out.println("Closed login popup.");
-    } catch (Exception e) {
-        System.out.println("Popup not found. Continuing...");
-    }
-
-    // ✅ Search for iPhone
-    Wrappers.enterTextWrapper(driver, By.name("q"), "iPhone");
-    System.out.println("Typed iPhone into search box");
-    Wrappers.pressEnter(driver, By.name("q"));
-    System.out.println("Pressed Enter to search iPhone");
-
-    // ✅ Wait for results to load
-    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-    wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//div[contains(@class,'tUxRFH')]")));
-
-    // ✅ Check for discounts using flexible locator
-    Boolean status = Wrappers.printTitleAndDiscountIphone(
-            driver,
-            By.xpath("//div[contains(@class,'UkUFwK') and contains(text(),'% off')]"),
-            discount
-    );
-
-    // ✅ Assert result
-    Assert.assertTrue(status, "No iPhone found with discount >= " + discount + "%");
-
-    System.out.println("Ending Test Case 02");
+    boolean result = Wrappers.printTitleAndDiscountIphone(driver, By.xpath("//div[contains(@class, 'UkUFwK')]"),  17);
+    Assert.assertTrue(result, "Percentage count failed or no products found with percentage greater than 17%");
+//div[contains(@class, 'UkUFwK')]
+    System.out.println("End Testcase:testCase02");
 }
-
-
 @Test(enabled = true)
 public void testCase03() throws InterruptedException {
     System.out.println("Beginning Test Case 03");

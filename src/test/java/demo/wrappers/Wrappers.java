@@ -26,6 +26,21 @@ import java.time.Duration;
 
 public class Wrappers {
 
+    public static void homePage(WebDriver driver, By locator) {
+        try {
+            driver.get("https://www.flipkart.com/");
+            Thread.sleep( 3000);
+
+            WebElement closePopup = driver.findElement(locator);
+            closePopup.click();
+        } catch (Exception e) {
+            System.out.println("No popup appeared.");
+        }
+    }
+
+    
+    
+    
     public static void enterTextWrapper(WebDriver driver, By locator, String textToEnter) {
         System.out.println("Sending Keys");
         try {

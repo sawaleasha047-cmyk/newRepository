@@ -1,7 +1,6 @@
 plugins {
     id 'java'
     id 'application'
-    id 'checkstyle'
 }
 
 group = 'org.example'
@@ -12,17 +11,16 @@ repositories {
 }
 
 dependencies {
-    testImplementation 'org.testng:testng:6.9.10'
+    testImplementation 'org.testng:testng:7.7.1' // Updated TestNG
     implementation 'org.seleniumhq.selenium:selenium-java:4.21.0'
 }
 
-buildDir = 'build'
+application {
+    mainClassName = 'demo.App'
+}
 
 test {
-    useTestNG() {
-        useDefaultListeners = true
-        suites "src/test/resources/testng.xml"
-    }
+    useTestNG() // Automatically picks up all @Test methods
 
     afterSuite { desc, result ->
         if (!desc.parent) {
@@ -44,26 +42,4 @@ test {
     outputs.upToDateWhen { false }
 }
 
-application {
-    // ✅ Correct syntax for Gradle 7+
-    mainClass = 'demo.App'
-}
-
-checkstyle {
-    toolVersion = '8.45'
-    config = rootProject.resources.text.fromFile('__CRIO__/checkstyle.xml')
-    sourceSets = [sourceSets.test]
-    ignoreFailures = true
-}
-
-tasks.withType(Checkstyle) {
-    reports {
-        xml.required = true
-        html.required = false
-    }
-}
-
-test {
-    dependsOn assemble
-    mustRunAfter clean
-}
+buildDir = 'build'
