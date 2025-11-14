@@ -102,7 +102,7 @@ public void testCase03() throws InterruptedException {
 
     Boolean status = Wrappers.printTitleAndImageUrlOfCoffeeMug(
             driver,
-            By.xpath("//div[@data-id]"),    // ✅ FINAL correct locator
+            By.xpath("//div[@data-id]"),   
             "coffee"
     );
 
