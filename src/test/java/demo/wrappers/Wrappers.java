@@ -162,7 +162,7 @@ public static boolean printTitleAndImageUrlOfCoffeeMug(WebDriver driver, By loca
 
             WebElement titleElement = null;
 
-            // ✅ Try 3 possible title locators
+            //  Try 3 possible title locators
             List<By> titleXpaths = Arrays.asList(
                 By.xpath(".//a[contains(@class,'s1Q9rs')]"),
                 By.xpath(".//a[contains(@class,'IRpwTa')]"),
@@ -183,7 +183,7 @@ public static boolean printTitleAndImageUrlOfCoffeeMug(WebDriver driver, By loca
 
             String title = titleElement.getText();
 
-            // ✅ Image locator stays same
+            //  Image locator stays same
             WebElement imgElement = product.findElement(
                 By.xpath(".//img[contains(@class,'_396cs4') or contains(@class,'_2r_T1I')]")
             );
