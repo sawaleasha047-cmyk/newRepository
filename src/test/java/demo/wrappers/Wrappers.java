@@ -114,7 +114,7 @@ public static boolean printTitleAndDiscountIphone(WebDriver driver, By locator, 
                 int discountValue = Integer.parseInt(discountPercent.replaceAll("[^0-9]", ""));
                 
                 if (discountValue > discount) {
-                    // ✅ Use relative XPath from the productRow context correctly
+                   
                     WebElement titleElement = productRow.findElement(By.xpath(".//ancestor::div[contains(@class,'tUxRFH')]//div[contains(@class,'KzDlHZ')]"));
                     String iphoneTitle = titleElement.getText().trim();
 
@@ -166,7 +166,7 @@ public static boolean printTitleAndImageUrlOfCoffeeMug(WebDriver driver, By loca
             List<By> titleXpaths = Arrays.asList(
                 By.xpath(".//a[contains(@class,'s1Q9rs')]"),
                 By.xpath(".//a[contains(@class,'IRpwTa')]"),
-                By.xpath(".//a[contains(@class,'V0OXxd')]")   // ✅ new layout
+                By.xpath(".//a[contains(@class,'V0OXxd')]")   
             );
 
             for (By bx : titleXpaths) {
@@ -177,7 +177,7 @@ public static boolean printTitleAndImageUrlOfCoffeeMug(WebDriver driver, By loca
             }
 
             if (titleElement == null) {
-                System.out.println("❌ Title not found for a product. Skipping...");
+                System.out.println(" Title not found for a product. Skipping...");
                 continue;
             }
 
